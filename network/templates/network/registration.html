@@ -1,0 +1,140 @@
+{% extends "index.html" %} {% block content %}
+
+<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="mx-auto h-10 w-auto text-sky-600"
+      fill="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+      />
+    </svg>
+    <h1
+      class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight font-mono text-gray-900"
+    >
+      Social
+    </h1>
+    <h2
+      class="mt-8 text-center text-1xl font-bold leading-9 tracking-tight text-gray-600"
+    >
+      Sign up to see photos and videos from your friends.
+    </h2>
+  </div>
+
+  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+    <form class="space-y-6" action="{% url 'registration' %}" method="POST">
+      {% csrf_token %}
+      <div>
+        <label
+          for="email"
+          class="block text-sm font-medium leading-6 text-gray-900"
+          >Email address</label
+        >
+        <div class="mt-2">
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            required
+            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label
+          for="username"
+          class="block text-sm font-medium leading-6 text-gray-900"
+          >Username</label
+        >
+        <div class="mt-2">
+          <input
+            id="username"
+            name="username"
+            type="text"
+            required
+            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          />
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between">
+          <label
+            for="password1"
+            class="block text-sm font-medium leading-6 text-gray-900"
+            >Password</label
+          >
+        </div>
+        <div class="mt-2">
+          <input
+            id="password1"
+            name="password1"
+            type="password"
+            required
+            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          />
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between">
+          <label
+            for="password2"
+            class="block text-sm font-medium leading-6 text-gray-900"
+            >Confirm password</label
+          >
+        </div>
+        <div class="mt-2">
+          <input
+            id="password2"
+            name="password2"
+            type="password"
+            required
+            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          />
+        </div>
+      </div>
+
+      <div>
+        <button
+          type="submit"
+          class="flex w-full justify-center rounded-md bg-cyan-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          Sign up
+        </button>
+      </div>
+      {% for field in registration_form %}
+      <p>
+          {% for error in field.errors %}
+            <p style="color: red">{{ error }}</p>
+          {% endfor %}
+      </p>
+      {% endfor %}
+      {% if registration_form.non_filed_errors %}
+      <div style="color: red">
+          <p> {{ registration_form.non_field_errors}}</p>
+      </div>
+      {% endif %}
+
+      <p class="mt-10 text-center text-sm text-gray-500">
+        Be signing up, you agree to our <strong>Terms</strong>,
+        <strong>Data Policy</strong> and <strong>Cookies Policy</strong>.
+      </p>
+
+      <div>
+        Have an account?
+        <a
+          href="{% url 'login' %}"
+          class="font-semibold leading-6 text-sky-600 hover:text-sky-500"
+          >Log in</a
+        >
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
