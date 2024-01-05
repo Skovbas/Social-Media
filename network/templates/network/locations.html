@@ -1,0 +1,73 @@
+{% extends "index.html" %} {% block content %}
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI4rGBYBxGqI8sV3JFX2LlluOC9pXUldA&libraries=places&callback=initMap"></script>
+<div id="map" style="height: 400px; width: 100%"></div>
+
+<div class="flex items-center my-5 px-3 py-2">
+  <div class="pl-3">
+    <svg
+      class="h-8 w-8 text-gray-600"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+      />
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+      />
+    </svg>
+  </div>
+  <h1 class="pl-3 text-4xl font-extrabold text-gray-600">{{ location }}</h1>
+</div>
+<h2 class="font-mono text-xl font-extrabold text-gray-700">Popular posts</h2>
+<div class="grid grid-cols-2 mt-4 md:grid-cols-3 gap-4">
+  {% for post in full_post %}
+  <div class="cursor-pointer hover:bg-gray-700 rounded-md overflow-hidden">
+    <img
+      class="h-60 w-full object-cover grayscale-image transition-transform transform hover:scale-105"
+      src="{{ post.photo.url }}"
+      alt=""
+    />
+  </div>
+  {% endfor %}
+</div>
+
+<script>
+  function initMap() {
+    // Initialize the geocoder
+    var geocoder = new google.maps.Geocoder();
+
+    // Replace 'Your Address' with the actual address or place name
+    var location = "{{ location }}";
+
+    // Make a geocoding request
+    geocoder.geocode({ address: location }, function (results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        var latitude = results[0].geometry.location.lat();
+        var longitude = results[0].geometry.location.lng();
+        var map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat: latitude, lng: longitude },
+          zoom: 13,
+        });
+
+        var marker = new google.maps.Marker({
+          position: { lat: latitude, lng: longitude },
+          map: map,
+          title: location,
+        });
+      } else {
+        console.error("Geocoding failed: " + status);
+      }
+    });
+  }
+
+  window.addEventListener("load", initMap);
+</script>
+{% endblock %}
