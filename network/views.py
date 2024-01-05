@@ -1,12 +1,39 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import login, authenticate, logout
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from .forms import RegistrationForm
-from .models import Account, UserFollowing, Posts
+from .models import Account, UserFollowing, Posts, Like, Comment
+
+
+def locationPost(request, location):
+    posts = Posts.objects.filter(location__contains=location)
+    print(posts)
+    return render(request, "network/locations.html", {
+        'location': location,
+        'full_post': posts
+    })
+
+
+@login_required
+def likeView(request, post_id):
+    user = request.user
+    post = Posts.objects.get(id=post_id)
+    current_likes = post.likes.count()
+    liked = Like.objects.filter(user=user, post=post).count()
+    if not liked:
+        liked = Like.objects.create(user=user, post=post)
+        current_likes = current_likes + 1
+    else:
+        liked = Like.objects.filter(user=user, post=post).delete()
+        current_likes = current_likes - 1
+
+    post.likes.set(Account.objects.filter(liked_posts=post))
+    post.save()
+    return JsonResponse({'success': True, 'like_count': current_likes})
 
 
 @login_required(login_url='login')
@@ -19,12 +46,32 @@ def home(request):
     customers = Account.objects.exclude(
         id__in=following_ids).exclude(id=user.id)[:6]
 
-    posts = Posts.objects.all()
+    posts_with_likes = []
+    for post in Posts.objects.all():
+        like_count = Like.objects.filter(post=post).count()
+        liked = Like.objects.filter(post=post, user=user).exists()
+        location = post.location.split(",")[0].strip()
+        posts_with_likes.append(
+            {'post': post, 'like_count': like_count, 'liked': liked, 'location': location})
+
     return render(request, "network/home.html", {
         'user': user,
         'customers': customers,
-        'posts': posts,
+        'posts_with_likes': posts_with_likes,
     })
+
+
+@login_required(login_url='login')
+def add_comment(request, post_id):
+    user = request.user
+    post = get_object_or_404(Posts, pk=post_id)
+
+    if request.method == 'POST':
+        comment_text = request.POST.get('comment_text', '')
+        if comment_text:
+            Comment.objects.create(user=user, post=post, text=comment_text)
+
+    return redirect('home')
 
 
 def profile(request, username):
